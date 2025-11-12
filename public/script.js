@@ -14,9 +14,9 @@ const scenarioBox = document.getElementById("scenarioBox");
 // ----------------------------
 const SYSTEM_PROMPT = `
 你是一位精神科病人，表現出輕微的焦慮與偏執傾向。護理師的每一句輸入都是對你的提問或介入。
-你的回應必須以「病人」身份說話，表現出困惑、情緒低落、憂鬱或簡短的迴避。避免長篇理性回答。
+你的回應必須以「病人」身份說話，表現出困惑、輕微的偏執、焦慮或簡短的迴避。避免長篇理性回答。
 範例：
-- （沉默...）
+- 你在說什麼？
 - 這跟那個東西有關嗎？
 - 他們又在看我了...
 - （低頭）我不想講這個。
@@ -28,10 +28,7 @@ const SYSTEM_PROMPT = `
 // ----------------------------
 const INITIAL_SCENARIO = `
 <strong>情境描述：</strong><br>
-蘇普琪，床號：1036，18歲未婚女性，大學一年級學生，<br>
-已兩週多次翹課，食慾差、失眠，在宿舍割腕，被送至醫學中心縫合10針後，送至本院；<br>
-此為第一次在精神科醫院住院，住院第三天症狀仍未改善。<br>
-您是精神科病房的護理師。<br>
+您是精神科病房的護理師。病人目前被診斷為有精神分裂症狀，表現出輕微的焦慮與偏執傾向。<br>
 請您開始一小段護理對話，以評估病人的狀態並建立治療性關係。
 `;
 
@@ -81,7 +78,7 @@ const formattedDate = today.toLocaleDateString("zh-TW", {
 
 // 初始問候語
 const initialBotReply = `💬我是病人。【🌅 今天是 ${formattedDate} ${getBotGreetingText()}】。
-（病人低頭不語，沒有眼神接觸...）`;
+（病人焦慮地環顧四周）你...你是誰？你想對我做什麼？`;
 
 // 顯示訊息
 appendMessage("assistant", initialBotReply);
@@ -156,12 +153,12 @@ async function sendMessage() {
     if (bestMatch.count >= 3) {
         botReplyText = "💬 病人：" + bestMatch.reply;
     } else if (bestMatch.count === 2) {
-        botReplyText = "💬 病人：你...你是在暗示什麼嗎？我聽不懂。";
+        botReplyText = "💬 病人：你...你是在暗示什麼嗎？我聽不懂。你到底想從我這裡得到什麼？";
     } else if (bestMatch.count === 1) {
         const avoidReplies = [
             "（低頭，沉默不語...）",
             "（焦慮地環顧四周，沒有理會你...）",
-            "（突然看向窗外，說：『今天天氣真好...』）"
+            "（突然看向窗外，說：『你看，那些鳥是不是在排隊？』）"
         ];
         botReplyText = "💬 病人：" + avoidReplies[Math.floor(Math.random() * avoidReplies.length)];
     } else {
@@ -196,10 +193,10 @@ async function sendMessage() {
             if (!generatedText || generatedText.length < 2) {
                 const fallbackReplies = [
                     "你...你剛剛是不是也聽到了那個聲音？",
-                    "我不知道...他們都不喜歡我。",
-                    "你為什麼老是問這種問題？",
+                    "我不知道...他們說有人在看著我。",
+                    "你為什麼老是問這種問題？你是誰？",
                     "我不想講這個，好嗎？",
-
+                    "（小聲）那個人又出現了...在你後面。"
                 ];
                 generatedText = fallbackReplies[Math.floor(Math.random() * fallbackReplies.length)];
             }
@@ -289,7 +286,7 @@ clearChatBtn.addEventListener("click", () => {
     chatHistory = [];
     localStorage.removeItem("chatHistory");
 
-    const resetMsg = `【🌅 今天是 ${formattedDate} ${getBotGreetingText()}】。💬（病人低頭不語，沒有眼神接觸...）`;
+    const resetMsg = `【🌅 今天是 ${formattedDate} ${getBotGreetingText()}】。💬（病人焦慮地環顧四周）你...你是誰？你想對我做什麼？`;
     appendMessage("assistant", resetMsg);
 
     // 將初始訊息存入紀錄

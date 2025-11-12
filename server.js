@@ -205,5 +205,5 @@ app.delete("/mocks/:idx", (req, res) => {
 --------------------------------------------------- */
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () =>
-    console.log(`🌅 自殺評估會談練習已啟動成功：http://localhost:${PORT}`)
+    console.log(`🌅 護理師與精神科病人的角色扮演對話已啟動成功：http://localhost:${PORT}`)
 );

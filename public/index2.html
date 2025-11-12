@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-TW"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>護理師與病人對話</title> <!-- 載入 Tailwind CSS (用於快速佈局) --> <script src="https://cdn.tailwindcss.com"></script> <!-- 載入 Noto Sans TC 字體 --> <link href="https://www.google.com/search?q=https://fonts.googleapis.com/css2%3Ffamily%3DNoto%2BSans%2BTC:wght%40400%3B700%26display%3Dswap" rel="stylesheet"> </head> <body class="min-h-screen flex items-center justify-center p-4"> <div class="chat-container"> <style> /* 聊天介面樣式 */ body { font-family: "Noto Sans TC", sans-serif; background-color: #f3f5f7; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 90vh; /* 確保佔據大部分視窗 */
+        }
+
+        #chat-box {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: #fafafa;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            scroll-behavior: smooth;
+        }
+
+        /* 隱藏滾動條 */
+        #chat-box::-webkit-scrollbar {
+            display: none;
+        }
+        #chat-box {
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 20px;
+            line-height: 1.5;
+            position: relative;
+            opacity: 1;
+        }
+
+        .user {
+            align-self: flex-end;
+            background-color: #d1e7ff; /* 護理師：較淡的藍色 */
+            color: #1f2937;
+            border-bottom-right-radius: 4px; 
+        }
+
+        .assistant {
+            align-self: flex-start;
+            background-color: #f9e79f; /* 病人：明顯的淺黃色 */
+            color: #1f2937;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 5px;
+        }
+
+        .user .message-container {
+            flex-direction: row-reverse;
+        }
+
+        /* 將 send button 樣式對應到 #send-button */
+        #send-button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            background-color: #0078d4;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #send-button:hover:not(:disabled) {
+            background-color: #005fa3;
+        }
+
+        #send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        #user-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        /* 病人頭像 */
+        .assistant-avatar {
+            font-size: 1.2em;
+        }
+    </style>
+
+    <header class="p-4 bg-gray-800 text-white rounded-t-lg shadow-lg -mt-5 -mx-5 mb-5">
+        <h1 class="text-xl font-bold">護理師與病人對話模擬 (獨立運行版)</h1>
+        <p class="text-sm opacity-80">您的話語（護理師）將會觸發病人的不同反應。所有邏輯都在這個單一檔案中。</p>
+    </header>
+
+    <div id="chat-box">
+        <!-- 初始歡迎訊息將由 JavaScript 動態載入 -->
+    </div>
+
+    <footer class="input-area border-t border-gray-200 pt-4">
+        <form id="chat-form" class="flex flex-grow space-x-3">
+            <input type="text" id="user-input" placeholder="輸入護理師的話語..."
+                   class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+                   required autocomplete="off">
+            <button type="submit" id="send-button"
+                    class="shadow-md transition duration-200 disabled:opacity-50"
+                    title="傳送訊息">
+                傳送
+            </button>
+        </form>
+        <div id="loading-indicator" class="hidden text-center text-sm text-gray-500 mt-2">
+            病人正在思考...
+        </div>
+        <div id="mock-status" class="hidden text-center text-xs mt-2 p-1 rounded-md"></div>
+    </footer>
+</div>
+
+<script>
+    // ------------------- 🔹 模擬後端邏輯與設定 🔹 -------------------
+    const MODEL_NAME = "gemini-2.5-flash";
+
+    // 🚨 這是關鍵！在 Canvas 環境中，API Key 留空，系統會自動提供
+    const apiKey = "";
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${apiKey}`;
+
+    const SYSTEM_PROMPT = "你是一位精神科病人，正試著理解護理師簡短、模糊的話語。你的回應要表現出困惑、輕微的偏執或焦慮，例如：'你在說什麼？'，'這跟那個東西有關嗎？'。你的回答必須簡短。";
+
+    // 內嵌 Mock 數據，作為前端的知識庫 (無法持久化儲存)
+    let MOCK_RESPONSES = [
+        { keywords: [{ word: "運動", weight: 1 }, { word: "早上", weight: 1 }, { word: "忙", weight: 1 }], reply: "運動？是...是他們在監視我嗎？我的肌肉裡有東西。" },
+        { keywords: [{ word: "心情不好", weight: 1 }, { word: "不想做", weight: 1 }, { word: "情緒", weight: 1 }], reply: "什麼感受？你是說...我被操控的情緒？別假裝你懂。" },
+        { keywords: [{ word: "報告", weight: 1 }, { word: "今晚", weight: 1 }, { word: "太晚", weight: 1 }, { word: "累", weight: 1 }], reply: "報告？那些秘密文件...我不能寫，他們會發現的！" },
+        { keywords: [{ word: "午餐", weight: 1 }, { word: "選擇", weight: 1 }, { word: "健康", weight: 1 }], reply: "食物...這裡的食物都有毒，我不要吃，別逼我！" },
+        { keywords: [{ word: "晚餐", weight: 1 }, { word: "簡單", weight: 1 }, { word: "家常", weight: 1 }], reply: "簡單？簡化我的存在嗎？你在說什麼？" },
+        { keywords: [{ word: "睡眠", weight: 1 }, { word: "晚上", weight: 1 }, { word: "不足", weight: 1 }], reply: "晚上...我一閉眼，那些聲音就來了，你叫我怎麼睡？" },
+        { keywords: [{ word: "會議", weight: 1 }, { word: "緊張", weight: 1 }, { word: "準備", weight: 1 }], reply: "會議室裡有攝像頭！你讓我去？是要陷害我嗎？" },
+        { keywords: [{ word: "學習", weight: 1 }, { word: "英文", weight: 1 }, { word: "單字", weight: 1 }], reply: "學習？他們讓我學這些密碼，你也要幫他們嗎？" },
+        { keywords: [{ word: "運動", weight: 1 }, { word: "下午", weight: 1 }, { word: "放鬆", weight: 1 }], reply: "放鬆？我隨時都必須保持警覺，你叫我怎麼放鬆？" },
+        { keywords: [{ word: "心情", weight: 1 }, { word: "低落", weight: 1 }, { word: "音樂", weight: 1 }], reply: "音樂？那根本不是音樂，那是他們透過電波在傳達訊息！" },
+        { keywords: [{ word: "你好", weight: 3 }, { word: "感覺", weight: 3 }, { word: "怎麼樣", weight: 3 } ], reply: "我... 我還好，護理師。你覺得我看起來還好嗎？" },
+        { keywords: [{ word: "早餐", weight: 1 }, { word: "吃了", weight: 1 }, { word: "藥", weight: 1 } ], reply: "早餐？好像有... 對，我吃了。那顆藍色的小藥丸，他們說可以幫我趕走那些聲音。" },
+        { keywords: [{ word: "晚上", weight: 1 }, { word: "睡得", weight: 1 }, { word: "好嗎", weight: 1 } ], reply: "（搓著手）昨晚... 房間的燈一直閃爍，有人一直在走廊上走動。我幾乎沒睡。" },
+        { keywords: [{ word: "心情", weight: 5 }, { word: "聊聊", weight: 1 }, { word: "今天", weight: 5 } ], reply: "我的心情... 就像被鎖在這個房間裡的一隻鳥。你聽見他們在談論我嗎？" }
+    ];
+
+    // 計算匹配分數
+    function calculateMatchScore(mock, userMessage) {
+        let score = 0;
+        mock.keywords.forEach(kw => {
+            if (userMessage.includes(kw.word)) {
+                score += kw.weight || 1;
+            }
+        });
+        return score;
+    }
+
+    // 提取關鍵字 (用於動態學習時創建新的 Mock)
+    function extractKeywords(text) {
+        return text
+            .replace(/[.,!?，。！？\n]/g, " ")
+            .split(/\s+/)
+            .filter(word => word.length > 1)
+            .map(word => ({ word, weight: 1 }));
+    }
+
+    // ------------------- 🔹 前端 DOM 與互動邏輯 🔹 -------------------
+    const chatForm = document.getElementById('chat-form');
+    const userInput = document.getElementById('user-input');
+    const chatBox = document.getElementById('chat-box');
+    const sendButton = document.getElementById('send-button');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const mockStatus = document.getElementById('mock-status');
+
+    function appendMessage(sender, text, score) {
+        const isUser = sender === 'user';
+        
+        const messageContainer = document.createElement('div');
+        messageContainer.className = `message-container ${isUser ? 'justify-end' : 'justify-start'} w-full`;
+
+        const bubble = document.createElement('div');
+        bubble.className = `message shadow-sm ${isUser ? 'user' : 'assistant'}`;
+        bubble.textContent = text;
+        
+        if (!isUser) {
+            const avatar = document.createElement('div');
+            avatar.className = 'assistant-avatar text-xl';
+            avatar.textContent = '👤';
+            messageContainer.appendChild(avatar);
+        }
+
+        messageContainer.appendChild(bubble);
+        
+        // 僅在 AI/Mock 訊息時顯示分數
+        if (!isUser && score !== undefined && score !== null) {
+            const scoreSpan = document.createElement('span');
+            scoreSpan.className = 'block mt-1 text-xs opacity-70';
+            scoreSpan.textContent = `[匹配分: ${score}]`;
+            bubble.appendChild(scoreSpan);
+        }
+        
+        chatBox.appendChild(messageContainer);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function updateStatus(score, mockUsed) {
+        mockStatus.classList.remove('hidden', 'bg-red-100', 'text-red-700', 'bg-green-100', 'text-green-700', 'bg-yellow-100', 'text-yellow-700');
+        
+        let statusText = `匹配分數: ${score} - `;
+        let statusClass = '';
+
+        if (score >= 3 && mockUsed) {
+            statusText += '高分匹配 (使用 Mock 回覆)';
+            statusClass = 'bg-green-100 text-green-700';
+        } else if (score === 2) {
+            statusText += '中度匹配 (困惑引導)';
+            statusClass = 'bg-yellow-100 text-yellow-700';
+        } else if (score === 1) {
+            statusText += '低度匹配 (迴避行為/隨機)';
+            statusClass = 'bg-yellow-100 text-yellow-700';
+        } else { // score === 0 (使用 AI 模型)
+            statusText += '無匹配 (使用 Gemini AI)';
+            statusClass = 'bg-red-100 text-red-700';
+        }
+
+        mockStatus.textContent = statusText;
+        mockStatus.classList.add(statusClass);
+        mockStatus.classList.remove('hidden');
+    }
+
+    async function handleChat(userMessage) {
+        // 1. 找匹配分數最高 mock
+        let bestMock = null;
+        let highestScore = 0;
+
+        MOCK_RESPONSES.forEach(m => {
+            const score = calculateMatchScore(m, userMessage);
+            if (score > highestScore) {
+                highestScore = score;
+                bestMock = m;
+            }
+        });
+
+        let responseData = {
+            reply: "",
+            score: highestScore,
+            mockUsed: false,
+        };
+
+        // 2. 實作 Mock 邏輯
+        if (highestScore >= 3 && bestMock) {
+            // 關鍵字大於或等於 3 個時，以最符合多數關鍵字匹配程度選擇 mock 優先回應
+            responseData.reply = bestMock.reply;
+            responseData.mockUsed = true;
+
+            return responseData;
+
+        } else if (highestScore === 2) {
+            // 關鍵字匹配 2 個時，給予困惑回應
+            responseData.reply = "你...你是在暗示什麼嗎？我聽不懂。";
+            return responseData;
+            
+        } else if (highestScore === 1) {
+            // 關鍵字符合 1 個時，隨機回應迴避行為
+            const lowScoreReplies = [
+                "（低頭，沉默不語...）",
+                "（看向窗外...）",
+                "（自言自語不理會....）"
+            ];
+            const randomIndex = Math.floor(Math.random() * lowScoreReplies.length);
+            responseData.reply = lowScoreReplies[randomIndex];
+
+            return responseData;
+        }
+
+        // 3. 無匹配 (highestScore = 0) - 呼叫 Gemini API
+        try {
+            const payload = {
+                contents: [
+                    { role: "user", parts: [{ text: userMessage }] },
+                ],
+                config: {
+                    systemInstruction: SYSTEM_PROMPT
+                }
+            };
+
+            // 使用 fetch 呼叫 Gemini API
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                // 拋出錯誤，讓 catch 區塊處理
+                throw new Error(`API error: ${response.status} ${response.statusText}`);
+            }
+
+            const result = await response.json();
+            const generatedText = result.candidates?.[0]?.content?.parts?.[0]?.text || "（沉默...）";
+
+            responseData.reply = generatedText;
+
+            // 動態學習加入 mock (不持久化)
+            const newKeywords = extractKeywords(userMessage);
+            if (newKeywords.length >= 2 && generatedText !== "（沉默...）") {
+                const isDuplicate = MOCK_RESPONSES.some(m => m.reply === responseData.reply);
+                if (!isDuplicate) {
+                    MOCK_RESPONSES.push({ keywords: newKeywords, reply: responseData.reply, weight: 1 });
+                }
+            }
+
+            return responseData;
+        } catch (error) {
+            console.error("Gemini API 錯誤:", error);
+            // 錯誤回覆（符合病人角色）
+            responseData.reply = "（焦慮地環顧四周）是不是有人在聽？這裡不能說，我什麼都不知道。";
+            return responseData;
+        }
+    }
+
+    // 處理表單提交
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const message = userInput.value.trim();
+
+        if (!message) return;
+
+        appendMessage('user', message);
+        userInput.value = '';
+
+        sendButton.disabled = true;
+        loadingIndicator.classList.remove('hidden');
+
+        const responseData = await handleChat(message);
+
+        appendMessage('ai', responseData.reply, responseData.score);
+        updateStatus(responseData.score, responseData.mockUsed);
+
+        sendButton.disabled = false;
+        loadingIndicator.classList.add('hidden');
+    });
+
+    // 初始歡迎語法：頁面載入後立即插入初始歡迎訊息
+    window.onload = () => {
+         appendMessage('ai', '我是病人。你...你是誰？你想對我做什麼？', null);
+    };
+</script>
+</body> </html>
+
