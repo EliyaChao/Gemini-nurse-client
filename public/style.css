@@ -17,32 +17,55 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
+    height: 100vh;
+    /* 🔧 讓內容撐滿整個畫面 */
+    box-sizing: border-box;
 }
 
+/* ----------------------------
+   ✅ 情境框（固定高度 + 可捲動，不壓縮對話框）
+---------------------------- */
 #chat-scenario {
-    margin-top: var(--chat-header-height);
     background-color: #eff6ff;
     border: 1px solid #93c5fd;
     padding: 15px;
     border-radius: 8px;
-    margin-bottom: 15px;
     color: #1e40af;
+    margin-bottom: 15px;
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
 
-    /* 👇 新增這三行 */
-    max-height: 100px;
-    /* 限制情境框最大高度，可依需求調整 */
+    /* 👇 新增與調整重點 */
+    max-height: 120px;
+    /* 限制情境框高度 */
     overflow-y: auto;
-    /* 若內容超出高度，出現垂直捲軸 */
+    /* 超出內容可滾動 */
     overflow-x: hidden;
-    /* 隱藏水平捲軸（可選） */
+    flex-shrink: 0;
+    /* 不讓它被壓縮 */
+    box-sizing: border-box;
+    scroll-behavior: smooth;
 }
 
+/* 美化卷軸（可選） */
+#chat-scenario::-webkit-scrollbar {
+    width: 6px;
+}
+
+#chat-scenario::-webkit-scrollbar-thumb {
+    background-color: #93c5fd;
+    border-radius: 3px;
+}
+
+/* ----------------------------
+   ✅ 對話框（自適應剩餘空間、不被輸入框遮住）
+---------------------------- */
 #chat-box {
     flex: 1;
-    height: 400px;
+    /* 自動撐滿中間空間 */
+    min-height: 0;
+    /* 🔧 允許在 flex 內縮放 */
     overflow-y: auto;
     border: 1px solid #ddd;
     padding: 10px;
@@ -64,6 +87,9 @@ body {
     scrollbar-width: none;
 }
 
+/* ----------------------------
+   ✅ 對話訊息樣式
+---------------------------- */
 .chat-message {
     max-width: 70%;
     padding: 10px 15px;
@@ -100,9 +126,14 @@ body {
     transform: translateY(-50%);
 }
 
+/* ----------------------------
+   ✅ 輸入區固定在底部
+---------------------------- */
 .chat-input-area {
     display: flex;
     gap: 10px;
+    flex-shrink: 0;
+    /* 🔧 固定高度，不被壓縮 */
 }
 
 #chat-user-input {
