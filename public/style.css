@@ -30,11 +30,19 @@ body {
     max-width: 800px;
     margin-left: auto;
     margin-right: auto;
+
+    /* 👇 新增這三行 */
+    max-height: 150px;
+    /* 限制情境框最大高度，可依需求調整 */
+    overflow-y: auto;
+    /* 若內容超出高度，出現垂直捲軸 */
+    overflow-x: hidden;
+    /* 隱藏水平捲軸（可選） */
 }
 
 #chat-box {
     flex: 1;
-    height: 300px;
+    height: 400px;
     overflow-y: auto;
     border: 1px solid #ddd;
     padding: 10px;
