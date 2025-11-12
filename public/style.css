@@ -32,7 +32,7 @@ body {
     margin-right: auto;
 
     /* 👇 新增這三行 */
-    max-height: 40px;
+    max-height: 20px;
     /* 限制情境框最大高度，可依需求調整 */
     overflow-y: auto;
     /* 若內容超出高度，出現垂直捲軸 */
