@@ -1,0 +1,218 @@
+body {
+    font-family: "Noto Sans TC", sans-serif;
+    background-color: #f3f5f7;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.chat-container {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+#chat-scenario {
+    margin-top: var(--chat-header-height);
+    background-color: #eff6ff;
+    border: 1px solid #93c5fd;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    color: #1e40af;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#chat-box {
+    flex: 1;
+    height: 400px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: #fafafa;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scroll-behavior: smooth;
+}
+
+#chat-box::-webkit-scrollbar {
+    display: none;
+}
+
+#chat-box {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.chat-message {
+    max-width: 70%;
+    padding: 10px 15px;
+    border-radius: 20px;
+    line-height: 1.5;
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.3s forwards;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chat-user {
+    align-self: flex-end;
+    background-color: #d1e7ff;
+}
+
+.chat-assistant {
+    align-self: flex-start;
+    background-color: #f9e79f;
+}
+
+.chat-assistant::before {
+    content: "🤖";
+    position: absolute;
+    left: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.chat-input-area {
+    display: flex;
+    gap: 10px;
+}
+
+#chat-user-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1em;
+}
+
+#chat-send-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #0078d4;
+    color: white;
+    cursor: pointer;
+}
+
+#chat-send-btn:hover {
+    background-color: #005fa3;
+}
+
+/* ----------------------------
+   Loading 指示器
+---------------------------- */
+.dot-pulse {
+    position: relative;
+    left: -9999px;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #4f46e5;
+    color: #4f46e5;
+    box-shadow: 9999px 0 0 -5px #4f46e5;
+    animation: dotPulse 1.5s infinite linear;
+    animation-delay: 0.25s;
+}
+
+.dot-pulse::before,
+.dot-pulse::after {
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    background-color: #4f46e5;
+    color: #4f46e5;
+}
+
+.dot-pulse::before {
+    box-shadow: 9984px 0 0 -5px #4f46e5;
+    animation: dotPulseBefore 1.5s infinite linear;
+    animation-delay: 0s;
+}
+
+.dot-pulse::after {
+    box-shadow: 10014px 0 0 -5px #4f46e5;
+    animation: dotPulseAfter 1.5s infinite linear;
+    animation-delay: 0.5s;
+}
+
+@keyframes dotPulseBefore {
+    0% {
+        box-shadow: 9984px 0 0 -5px #4f46e5;
+    }
+
+    30% {
+        box-shadow: 9984px 0 0 2px #4f46e5;
+    }
+
+    60%,
+    100% {
+        box-shadow: 9984px 0 0 -5px #4f46e5;
+    }
+}
+
+@keyframes dotPulse {
+    0% {
+        box-shadow: 9999px 0 0 -5px #4f46e5;
+    }
+
+    30% {
+        box-shadow: 9999px 0 0 2px #4f46e5;
+    }
+
+    60%,
+    100% {
+        box-shadow: 9999px 0 0 -5px #4f46e5;
+    }
+}
+
+@keyframes dotPulseAfter {
+    0% {
+        box-shadow: 10014px 0 0 -5px #4f46e5;
+    }
+
+    30% {
+        box-shadow: 10014px 0 0 2px #4f46e5;
+    }
+
+    60%,
+    100% {
+        box-shadow: 10014px 0 0 -5px #4f46e5;
+    }
+}
+
+/* ----------------------------
+   匹配分數顯示
+---------------------------- */
+#mock-status {
+    display: none;
+    text-align: center;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    margin-left: auto;
+    font-weight: 500;
+}

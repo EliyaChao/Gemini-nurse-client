@@ -1,0 +1,584 @@
+[
+  {
+    "keywords": [
+      {
+        "word": "護理師",
+        "weight": 1
+      },
+      {
+        "word": "照顧",
+        "weight": 1
+      },
+      {
+        "word": "今天",
+        "weight": 1
+      }
+    ],
+    "reply": "（病人警惕地看著你）你...你確定你是護理師嗎？你們不是都在監視我？"
+  },
+  {
+    "keywords": [
+      {
+        "word": "你好",
+        "weight": 1
+      },
+      {
+        "word": "感覺",
+        "weight": 1
+      },
+      {
+        "word": "怎麼樣",
+        "weight": 1
+      }
+    ],
+    "reply": "我... 我還好，護理師。你覺得我看起來還好嗎？"
+  },
+  {
+    "keywords": [
+      {
+        "word": "你好",
+        "weight": 1
+      },
+      {
+        "word": "今天",
+        "weight": 1
+      },
+      {
+        "word": "這班",
+        "weight": 1
+      },
+      {
+        "word": "當班",
+        "weight": 1
+      },
+      {
+        "word": "照顧",
+        "weight": 1
+      },
+      {
+        "word": "護理師",
+        "weight": 1
+      }
+    ],
+    "reply": "（低頭）你好..."
+  },
+  {
+    "keywords": [
+      {
+        "word": "名字",
+        "weight": 1
+      },
+      {
+        "word": "叫什麼",
+        "weight": 1
+      },
+      {
+        "word": "請問",
+        "weight": 1
+      },
+      {
+        "word": "姓名",
+        "weight": 1
+      }
+    ],
+    "reply": "（低頭）我叫蘇普琪..."
+  },
+  {
+    "keywords": [
+      {
+        "word": "可以",
+        "weight": 1
+      },
+      {
+        "word": "手圈",
+        "weight": 1
+      },
+      {
+        "word": "核對",
+        "weight": 1
+      },
+      {
+        "word": "確認",
+        "weight": 1
+      },
+      {
+        "word": "看",
+        "weight": 1
+      }
+    ],
+    "reply": "（抬右手，露出手圈）"
+  },
+  {
+    "keywords": [
+      {
+        "word": "可以",
+        "weight": 1
+      },
+      {
+        "word": "坐",
+        "weight": 1
+      },
+      {
+        "word": "位置",
+        "weight": 1
+      }
+    ],
+    "reply": "可以"
+  },
+  {
+    "keywords": [
+      {
+        "word": "會談",
+        "weight": 1
+      },
+      {
+        "word": "目的",
+        "weight": 1
+      },
+      {
+        "word": "環境",
+        "weight": 1
+      }
+    ],
+    "reply": "嗯"
+  },
+  {
+    "keywords": [
+      {
+        "word": "入院",
+        "weight": 1
+      },
+      {
+        "word": "低落",
+        "weight": 1
+      },
+      {
+        "word": "原因",
+        "weight": 1
+      }
+    ],
+    "reply": "就不想活了，割腕就被送來住院了。"
+  },
+  {
+    "keywords": [
+      {
+        "word": "心情",
+        "weight": 1
+      },
+      {
+        "word": "感受",
+        "weight": 1
+      }
+    ],
+    "reply": "很不好，真的很不好"
+  },
+  {
+    "keywords": [
+      {
+        "word": "心情",
+        "weight": 1
+      },
+      {
+        "word": "分數",
+        "weight": 1
+      },
+      {
+        "word": "0分到10分",
+        "weight": 1
+      }
+    ],
+    "reply": "8分"
+  },
+  {
+    "keywords": [
+      {
+        "word": "壓力",
+        "weight": 1
+      },
+      {
+        "word": "事件",
+        "weight": 1
+      },
+      {
+        "word": "割腕",
+        "weight": 1
+      }
+    ],
+    "reply": "我以前成績很好，可是現在一落千丈，課業壓力很大，我什麼作業都交不出來，同學都叫我輸不起，我想在這世界上消失!"
+  },
+  {
+    "keywords": [
+      {
+        "word": "體會",
+        "weight": 1
+      },
+      {
+        "word": "難受",
+        "weight": 1
+      },
+      {
+        "word": "理解",
+        "weight": 1
+      }
+    ],
+    "reply": "唉…"
+  },
+  {
+    "keywords": [
+      {
+        "word": "誰知道",
+        "weight": 1
+      },
+      {
+        "word": "告訴",
+        "weight": 1
+      },
+      {
+        "word": "家人",
+        "weight": 1
+      }
+    ],
+    "reply": "我媽媽，我有跟他說"
+  },
+  {
+    "keywords": [
+      {
+        "word": "爸爸",
+        "weight": 1
+      },
+      {
+        "word": "朋友",
+        "weight": 1
+      },
+      {
+        "word": "其他人",
+        "weight": 1
+      }
+    ],
+    "reply": "沒有，我單親也沒朋友"
+  },
+  {
+    "keywords": [
+      {
+        "word": "媽媽",
+        "weight": 1
+      },
+      {
+        "word": "說什麼",
+        "weight": 1
+      }
+    ],
+    "reply": "媽媽只會叫我不要想太多，什麼忙也幫不上，一點用都沒有。"
+  },
+  {
+    "keywords": [
+      {
+        "word": "之後",
+        "weight": 1
+      },
+      {
+        "word": "處理",
+        "weight": 1
+      },
+      {
+        "word": "事情",
+        "weight": 1
+      }
+    ],
+    "reply": "我不想再回去學校，也不想再看到那些嘲笑我的人，就割腕了。"
+  },
+  {
+    "keywords": [
+      {
+        "word": "過去",
+        "weight": 1
+      },
+      {
+        "word": "傷害自己",
+        "weight": 1
+      },
+      {
+        "word": "次數",
+        "weight": 1
+      }
+    ],
+    "reply": "恩…之前高三準備指考常常失眠，心情不好就會用美工刀割手，很多次記不清楚了。"
+  },
+  {
+    "keywords": [
+      {
+        "word": "自殺",
+        "weight": 1
+      },
+      {
+        "word": "想法",
+        "weight": 1
+      },
+      {
+        "word": "吞藥",
+        "weight": 1
+      }
+    ],
+    "reply": "有做過幾次？後來高三指考的成績很不理想，我的志願都沒有考到，覺得很丟臉、很想消失在世界上，有一次就在家吞了一堆藥，也記不清楚自己吞了多少。"
+  },
+  {
+    "keywords": [
+      {
+        "word": "現在",
+        "weight": 1
+      },
+      {
+        "word": "自殺念頭",
+        "weight": 1
+      },
+      {
+        "word": "情緒",
+        "weight": 1
+      }
+    ],
+    "reply": "會"
+  },
+  {
+    "keywords": [
+      {
+        "word": "持續",
+        "weight": 1
+      },
+      {
+        "word": "偶爾",
+        "weight": 1
+      },
+      {
+        "word": "出現",
+        "weight": 1
+      }
+    ],
+    "reply": "幾乎每天都有"
+  },
+  {
+    "keywords": [
+      {
+        "word": "多久",
+        "weight": 3
+      },
+      {
+        "word": "開始",
+        "weight": 1
+      },
+      {
+        "word": "持續時間",
+        "weight": 1
+      }
+    ],
+    "reply": "從高三考試結果不如預期開始到現在"
+  },
+  {
+    "keywords": [
+      {
+        "word": "自殺",
+        "weight": 4
+      },
+      {
+        "word": "方式",
+        "weight": 1
+      }
+    ],
+    "reply": "還是割腕。"
+  },
+  {
+    "keywords": [
+      {
+        "word": "什麼時候",
+        "weight": 2
+      },
+      {
+        "word": "時機",
+        "weight": 1
+      }
+    ],
+    "reply": "晚上沒人注意的時候"
+  },
+  {
+    "keywords": [
+      {
+        "word": "地點",
+        "weight": 1
+      },
+      {
+        "word": "在哪裡",
+        "weight": 1
+      }
+    ],
+    "reply": "在房間"
+  },
+  {
+    "keywords": [
+      {
+        "word": "工具",
+        "weight": 2
+      },
+      {
+        "word": "物品",
+        "weight": 1
+      }
+    ],
+    "reply": "想辦法找尖銳的東西"
+  },
+  {
+    "keywords": [
+      {
+        "word": "醫院",
+        "weight": 1
+      },
+      {
+        "word": "取得",
+        "weight": 1
+      },
+      {
+        "word": "尖銳物",
+        "weight": 1
+      }
+    ],
+    "reply": "水溝蓋的鐵片就可以啊!"
+  },
+  {
+    "keywords": [
+      {
+        "word": "答應",
+        "weight": 1
+      },
+      {
+        "word": "住院",
+        "weight": 1
+      },
+      {
+        "word": "不傷害自己",
+        "weight": 1
+      }
+    ],
+    "reply": "好，我盡量"
+  },
+  {
+    "keywords": [
+      {
+        "word": "確認",
+        "weight": 1
+      },
+      {
+        "word": "傷口",
+        "weight": 3
+      }
+    ],
+    "reply": "（雙手伸出來）"
+  },
+  {
+    "keywords": [
+      {
+        "word": "其他",
+        "weight": 2
+      },
+      {
+        "word": "割痕",
+        "weight": 1
+      }
+    ],
+    "reply": "沒有"
+  },
+  {
+    "keywords": [
+      {
+        "word": "紗布",
+        "weight": 6
+      },
+      {
+        "word": "手部",
+        "weight": 2
+      },
+      {
+        "word": "傷口",
+        "weight": 3
+      }
+    ],
+    "reply": "嗯"
+  },
+  {
+    "keywords": [
+      {
+        "word": "量",
+        "weight": 1
+      },
+      {
+        "word": "傷口大小",
+        "weight": 1
+      }
+    ],
+    "reply": "嗯（SP伸出左手配合測量）"
+  },
+  {
+    "keywords": [
+      {
+        "word": "最近",
+        "weight": 2
+      },
+      {
+        "word": "還有",
+        "weight": 1
+      },
+      {
+        "word": "自殺想法",
+        "weight": 1
+      },
+      {
+        "word": "自殺念頭",
+        "weight": 1
+      },
+      {
+        "word": "補充",
+        "weight": 1
+      }
+    ],
+    "reply": "嗯…沒有。"
+  },
+  {
+    "keywords": [
+      {
+        "word": "護理站",
+        "weight": 1
+      },
+      {
+        "word": "幫忙",
+        "weight": 1
+      },
+      {
+        "word": "問題",
+        "weight": 1
+      },
+      {
+        "word": "會談結束",
+        "weight": 1
+      },
+      {
+        "word": "回病室",
+        "weight": 1
+      }
+    ],
+    "reply": "沒有"
+  },
+  {
+    "keywords": [
+      {
+        "word": "護理站(1)",
+        "weight": 1
+      },
+      {
+        "word": "幫忙(1)",
+        "weight": 1
+      },
+      {
+        "word": "問題(1)",
+        "weight": 1
+      }
+    ],
+    "reply": "沒有"
+  }
+]

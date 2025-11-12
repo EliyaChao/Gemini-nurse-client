@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>對話模擬 - 管理介面</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1 { color: #2c3e50; }
+        textarea, input { width: 300px; margin-bottom: 5px; }
+        textarea { height: 50px; }
+        button { margin: 5px 0; padding: 5px 10px; cursor: pointer; }
+        .mock-item { border-bottom: 1px solid #ccc; padding: 10px 0; }
+        .keywords { color: #2980b9; }
+        .reply { color: #27ae60; margin: 5px 0; }
+        .edit-mode { background-color: #f0f8ff; padding: 5px; }
+        .search-bar { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>對話模擬 - 動態學習管理</h1>
+
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="搜尋關鍵字或回覆文字">
+        <button onclick="searchMocks()">搜尋</button>
+        <button onclick="clearSearch()">清除搜尋</button>
+    </div>
+
+    <div id="mock-list"></div>
+
+    <h2>新增 mock</h2>
+    <textarea id="new-message" placeholder="輸入使用者訊息"></textarea><br>
+    <textarea id="new-reply" placeholder="輸入回覆訊息"></textarea><br>
+    <button onclick="addMock()">新增</button>
+
+<script>
+    let mocksData = [];
+
+    async function fetchMocks() {
+        const res = await fetch('/mocks');
+        mocksData = await res.json();
+        displayMocks(mocksData);
+    }
+
+    function displayMocks(mocks) {
+        const listDiv = document.getElementById('mock-list');
+        listDiv.innerHTML = '';
+
+        mocks.forEach((mock, idx) => {
+            const div = document.createElement('div');
+            div.className = 'mock-item';
+            div.id = 'mock-' + idx;
+
+            const keywordsText = mock.keywords.map(k => `${k.word}(${k.weight})`).join(', ');
+
+            div.innerHTML = `
+                <b>索引 ${idx}</b><br>
+                <span class="keywords">關鍵字: ${keywordsText}</span><br>
+                <span class="reply">回覆: ${mock.reply}</span><br>
+                <button onclick="enableEdit(${idx})">編輯</button>
+                <button onclick="deleteMock(${idx})">刪除</button>
+            `;
+            listDiv.appendChild(div);
+        });
+    }
+
+    function enableEdit(idx) {
+        const mock = mocksData[idx];
+        const div = document.getElementById('mock-' + idx);
+
+        div.classList.add('edit-mode');
+
+        div.innerHTML = `
+            <b>索引 ${idx}</b><br>
+            <input type="text" id="edit-keywords-${idx}" value="${mock.keywords.map(k => k.word).join(', ')}"><br>
+            <textarea id="edit-reply-${idx}">${mock.reply}</textarea><br>
+            <button onclick="saveEdit(${idx})">儲存</button>
+            <button onclick="cancelEdit()">取消</button>
+        `;
+    }
+
+    async function saveEdit(idx) {
+        const keywordsInput = document.getElementById('edit-keywords-' + idx).value.trim();
+        const reply = document.getElementById('edit-reply-' + idx).value.trim();
+
+        if (!keywordsInput || !reply) {
+            alert("關鍵字和回覆都不能為空");
+            return;
+        }
+
+        const keywords = keywordsInput.split(',').map(word => ({ word: word.trim(), weight: 1 }));
+
+        const res = await fetch(`/mocks/${idx}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ keywords, reply })
+        });
+
+        const result = await res.json();
+        if (result.success) {
+            fetchMocks();
+        } else {
+            alert("更新失敗: " + result.message);
+        }
+    }
+
+    function cancelEdit() {
+        fetchMocks();
+    }
+
+    async function addMock() {
+        const message = document.getElementById('new-message').value.trim();
+        const reply = document.getElementById('new-reply').value.trim();
+
+        if (!message || !reply) {
+            alert("使用者訊息和回覆都不能為空");
+            return;
+        }
+
+        await fetch('/mocks', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message, reply })
+        });
+
+        document.getElementById('new-message').value = '';
+        document.getElementById('new-reply').value = '';
+        fetchMocks();
+    }
+
+    async function deleteMock(idx) {
+        if (!confirm(`確定要刪除索引 ${idx} 的 mock 嗎？`)) return;
+
+        await fetch(`/mocks/${idx}`, { method: 'DELETE' });
+        fetchMocks();
+    }
+
+    function searchMocks() {
+        const query = document.getElementById('search-input').value.trim().toLowerCase();
+        if (!query) {
+            displayMocks(mocksData);
+            return;
+        }
+
+        const filtered = mocksData.filter(mock => {
+            const keywords = mock.keywords.map(k => k.word.toLowerCase()).join(', ');
+            const reply = mock.reply.toLowerCase();
+            return keywords.includes(query) || reply.includes(query);
+        });
+
+        displayMocks(filtered);
+    }
+
+    // 監聽 Enter 觸發搜尋
+    const searchInput = document.getElementById('search-input');
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchMocks();
+        }
+    });
+
+    function clearSearch() {
+        document.getElementById('search-input').value = ''; // 清空輸入欄
+        displayMocks(mocksData); // 顯示完整列表
+    }
+
+
+    // 頁面載入時取得 mock 列表
+    fetchMocks();
+</script>
+
+</body>
+</html>
