@@ -34,23 +34,22 @@
             height: var(--header-height);
         }
 
-/* ✅ 情境框樣式（固定高度 + 可滾動） */
-#scenarioBox {
-    background-color: #eff6ff; /* 淺藍背景 */
-    border: 1px solid #93c5fd; /* 藍色邊框 */
-    padding: 15px;
-    border-radius: 8px;
-    color: #1e40af; /* 深藍文字 */
-    max-width: 800px;
-    margin: calc(var(--header-height) + 10px) auto 10px; /* 避開 header */
-    line-height: 1.6;
+        /* ✅ 情境框樣式（固定高度 + 可滾動） */
+        #scenarioBox {
+            background-color: #eff6ff; /* 淺藍背景 */
+            border: 1px solid #93c5fd; /* 藍色邊框 */
+            padding: 15px;
+            border-radius: 8px;
+            color: #1e40af; /* 深藍文字 */
+            max-width: 800px;
+            margin: calc(var(--header-height) + 10px) auto 10px; /* 避開 header */
+            line-height: 1.6;
 
-    /* 👇 新增以下設定 */
-    max-height: 40px;       /* 限制最大高度（可依需要調整） */
-    overflow-y: auto;        /* 超出時出現垂直捲軸 */
-    overflow-x: hidden;      /* 隱藏水平捲軸（可選） */
-}
-
+            /* 👇 新增以下設定 */
+            max-height: 100px;       /* 限制最大高度（可依需要調整） */
+            overflow-y: auto;        /* 超出時出現垂直捲軸 */
+            overflow-x: hidden;      /* 隱藏水平捲軸（可選） */
+        }
 
         .chat-box-wrapper {
             height: calc(100vh - var(--header-height) - var(--input-height) - 120px);
